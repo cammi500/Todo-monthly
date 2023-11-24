@@ -12,6 +12,9 @@
       <div class="col">
       <button type="button"  class="btn btn-warning" v-on:click="addInTasks()">Add</button>
       </div>
+      <div class="col">
+      <button class="btn btn-danger" type="button" @click="deleteTasks()">Delete
+      </button></div>
      
       </div>
       <div class="row">
@@ -55,7 +58,7 @@ export default {
       return this.hideCompleted ? this.tasks.filter((v)=>!v.done) :this.tasks;
     }
   },
-    methods :{
+    methods : {
       addInTasks(){
        if(this.addTasks === ''){
         return alert('please add task')
@@ -63,10 +66,25 @@ export default {
        this.tasks.push({
         action: this.addTasks,done: false,
        });
+          StoreData();
        this.addTasks = '';
+      },
+      deleteTasks(){
+        this.tasks =  this.tasks.filter((v)=>!v.done);
+           StoreData();
+      },
+      StoreData(){
+          localStorage.setItem('myLocalTask',JSON.stringify(this.tasks));
       }
-    }
-}
+    },
+    //after de mo data not deleted
+      mounted(){
+        let data = localStorage.getItem('myLocalTask');
+        if(data !== null){
+          this.tasks= JSON.parse(data);
+        }
+      }
+};
 </script>
 
 <style>
